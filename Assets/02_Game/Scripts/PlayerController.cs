@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 CurrentPos = Vector3.zero;
     private Vector3 PosChange = Vector3.zero;
 
+    private bool SubCheck = false;
 
     // Start is called before the first frame update
     void Start()
@@ -44,19 +45,20 @@ public class PlayerController : MonoBehaviour
             MoveDirection = transform.TransformDirection(MoveDirection);  // キャラクターの移動に慣性をかける
             MoveDirection *= Speed;                                       // キャラクターの設定スピードを乗算
 
-            if((CurrentPos.z == -1.0f) && Input.GetKey(KeyCode.Z))
+            if(SubCheck == false && (CurrentPos.z == -1.0f) && Input.GetKey(KeyCode.Z))
             {
                 PosChange.z = 1.5f;
+                SubCheck = true;
                 //Controller.transform = PosChange;
 
-               // PosChange.z = 1.5f;
+                // PosChange.z = 1.5f;
                 //CurrentPos.position = PosChange;
             }
-            else if((CurrentPos.z == 1.5f) && Input.GetKey(KeyCode.Z))
+            else if(SubCheck == true && (CurrentPos.z == 1.5f) && Input.GetKey(KeyCode.Z))
             {
                 PosChange.z = -1.0f;
                 Controller.Move(PosChange);
-
+                SubCheck = false;
                 // PosChange.z = -1.0f;
                 // CurrentPos.position = PosChange;
             }    
