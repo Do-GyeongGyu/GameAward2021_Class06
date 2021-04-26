@@ -2242,7 +2242,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "\u64CD\u4F5C\u65B9\u6CD5\n\n\u5341\u5B57\u30AD\u30FC :  \u79FB\u52D5\nSpace
     :      \u30B8\u30E3\u30F3\u30D7\nZ :               \u88CF\u5074\u30FB\u8868\u5074\u79FB\u52D5\nC
-    :               \u30AA\u30D6\u30B8\u30A7\u30AF\u30C8\u79FB\u52D5\n\nTest - Kenta"
+    :               \u30AA\u30D6\u30B8\u30A7\u30AF\u30C8\u79FB\u52D5"
 --- !u!222 &1037034713
 CanvasRenderer:
   m_ObjectHideFlags: 0
