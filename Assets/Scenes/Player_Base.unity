@@ -231,7 +231,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Speed: 5
-  _JumpSpeed: 10
+  _MaxSpeed: 5
+  _JumpPower: 10
+  _Rate: 0.5
   _Gravity: 20
   _DefaultPos: {x: 1, y: 2, z: -1}
   _IsFront: 1
@@ -1573,7 +1575,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Speed: 5
-  _JumpSpeed: 10
+  _MaxSpeed: 5
+  _JumpPower: 10
+  _Rate: 0.5
   _Gravity: 20
   _DefaultPos: {x: 0, y: 0, z: 0}
   _IsFront: 1

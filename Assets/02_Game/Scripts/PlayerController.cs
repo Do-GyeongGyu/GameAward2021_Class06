@@ -18,8 +18,10 @@ public class PlayerController : MonoBehaviour
     };
 
     // パラメータ
-    public float _Speed         = 5.0f;                             // キャラクターの移動速度
-    public float _JumpSpeed     = 10.0f;                            // ジャンプ力
+    public float _Speed         = 0.0f;                             // キャラクターの移動速度
+    public float _MaxSpeed      = 5.0f;
+    public float _JumpPower     = 10.0f;                            // ジャンプ力
+    public float _Rate          = 0.1f;
     public float _Gravity       = 20.0f;                            // 重力の大きさ
     public Vector3 _DefaultPos  = new Vector3(0.0f, 0.0f, 0.0f);    // プレイヤーの初期位置
     public bool _IsFront        = true;                             // 表ステージかどうか
@@ -28,7 +30,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _MoveDirection = Vector3.zero;   // キャラクターの移動量
     private float _H;                                // キー入力取得用
     private CharactorState _CharactorState;          // キャラクターステート
-    private GameObject TMPAerial;
+    private GameObject _TMPAerial;
     
 
     // メンバ関数
@@ -77,31 +79,43 @@ public class PlayerController : MonoBehaviour
         // CharactorStateの初期化
         _CharactorState = CharactorState.STATE_NORMAL;   // 初期値を表に設定
 
-        TMPAerial = GameObject.Find("Aerial");
+        _TMPAerial = GameObject.Find("Aerial");
     }
 
     // Update is called once per frame
     void Update()
     {
-        //CurrentPos = this.transform.position;
-        //PosChange = new Vector3(CurrentPos.x, CurrentPos.y, 0.0f);
-        
         if(_CharactorState == CharactorState.STATE_NORMAL)// 通常状態
         {
             // キー入力取得
             _H = Input.GetAxis("Horizontal");    // 値の範囲(-1.0f~1.0f)
+                                                 //if (Input.GetKey(KeyCode.A))
+                                                 //{
+                                                 //    _Speed -= _Rate * Time.deltaTime;
+                                                 //    if (Mathf.Abs(_Speed) > _MaxSpeed)
+                                                 //        _Speed = -_MaxSpeed;
+                                                 //}
+                                                 //else if (Input.GetKey(KeyCode.D))
+                                                 //{
+                                                 //    _Speed += (_MaxSpeed / _Rate) * Time.deltaTime;
+                                                 //    if (_Speed > _MaxSpeed)
+                                                 //        _Speed = _MaxSpeed;
+                                                 //}
+
+
+
 
             // キャラクターの移動
             if (_Controller.isGrounded)// キャラクターが地面についているとき
             {
                 _MoveDirection = new Vector3(_H, 0.0f, 0.0f);                   // キー入力でx成分のみ移動量に加える
-                _MoveDirection = transform.TransformDirection(_MoveDirection);  // キャラクターの移動に慣性をかける
+                //_MoveDirection = transform.TransformDirection(_MoveDirection);
                 _MoveDirection *= _Speed;                                       // キャラクターの設定スピードを乗算
 
                 // ジャンプ
-                if (Input.GetKeyDown(KeyCode.Space))// SPACEキーが押されたとき
+                if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0))// SPACEキーが押されたとき
                 {
-                    _MoveDirection.y = _JumpSpeed;  // y成分にキャラクターのジャンプ力を加算
+                    _MoveDirection.y = _JumpPower;  // y成分にキャラクターのジャンプ力を加算
                 }
 
                 // 表と裏の変更
@@ -135,35 +149,22 @@ public class PlayerController : MonoBehaviour
                         }
                     }
                 }
-
-                //if(SubCheck == false && (CurrentPos.z == -1.0f) && Input.GetKey(KeyCode.Z))
-                //{
-                //    PosChange.z = 1.5f;
-                //    SubCheck = true;
-                //    //Controller.transform = PosChange;
-
-                //    // PosChange.z = 1.5f;
-                //    //CurrentPos.position = PosChange;
-                //}
-                //else if(SubCheck == true && (CurrentPos.z == 1.5f) && Input.GetKey(KeyCode.Z))
-                //{
-                //    PosChange.z = -1.0f;
-                //    Controller.Move(PosChange);
-                //    SubCheck = false;
-                //    // PosChange.z = -1.0f;
-                //    // CurrentPos.position = PosChange;
-                //}
             }
+            else if(!_Controller.isGrounded)
+            {
+                _MoveDirection.x = _H;                                          // キー入力でx成分のみ移動量に加える
+                //_MoveDirection = transform.TransformDirection(_MoveDirection);
+                _MoveDirection.x *= _Speed;                                     // キャラクターの設定スピードを乗算
+
+                Debug.Log("a");
+            }
+
+            // 慣性
+            //_MoveDirection.x -= _Rate * Time.deltaTime;
 
             // 重力設定
             _MoveDirection.y -= _Gravity * Time.deltaTime;
             _Controller.Move(_MoveDirection * Time.deltaTime);
-
-            // 落下判定
-            //if(transform.position.y < _MinLevel)// 落下判定高度より下の時
-            //{
-            //    SetState(CharactorState.STATE_WARP);  // キャラクターのステートをワープ状態にセット
-            //}
         }
         else if(_CharactorState == CharactorState.STATE_WARP)    // ワープ状態
         {
